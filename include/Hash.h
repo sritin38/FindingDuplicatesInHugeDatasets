@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include "../include/rabinkarphash.h"
+#include "Minimizer.h"
 using namespace std;
 
 struct Hash {
@@ -13,6 +14,6 @@ struct Hash {
 
 
     Hash(string hash_value, int substring_window, int hash_bits=32);
-    size_t get_min_hash(KarpRabinHash<> hasher);
+    Minimizer get_min_hash(KarpRabinHash<> hasher);
     void update_string_value(string str);
 };

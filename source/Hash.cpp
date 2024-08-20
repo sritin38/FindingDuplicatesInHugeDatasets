@@ -18,7 +18,7 @@ Hash::Hash(string hash_value, int substring_window, int hash_bits) {
 }
 
 // Get min hash value from the string
-size_t Hash::get_min_hash(KarpRabinHash<> hasher) {
+Minimizer Hash::get_min_hash(KarpRabinHash<> hasher) {
 
     hasher.reset();
 
@@ -30,6 +30,8 @@ size_t Hash::get_min_hash(KarpRabinHash<> hasher) {
 
     std::cout << "Hash of '" << hash_string.substr(0, substring_window) << "' is: " << hasher.hashvalue << std::endl;
     size_t min_hash = hasher.hashvalue;
+    size_t min_index = 0;
+    string sequence = hash_string.substr(0, substring_window);
 
     // Slide the window and update the hash for subsequent substrings
     for (int i = 1; i <= hash_string.length() - substring_window; i++) {
@@ -40,10 +42,14 @@ size_t Hash::get_min_hash(KarpRabinHash<> hasher) {
         if (min_hash < hasher.hashvalue) {
 
             min_hash = hasher.hashvalue;
+            min_index = i;
+            sequence = hash_string.substr(i, substring_window);
         }
     }
 
-    return min_hash;
+    Minimizer minimizer = Minimizer(min_hash, sequence, min_index);
+
+    return minimizer;
 }
 
 void Hash::update_string_value(string str) {
