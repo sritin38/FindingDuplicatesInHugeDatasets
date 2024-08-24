@@ -6,6 +6,9 @@
 #include "CountFrequency.cpp"
 #include "NumberFormation.cpp"
 #include "Heap.cpp"
+#include "Node.cpp"
+#include "SuffixTree.cpp"
+#include "ReverseSuffixTree.cpp"
 
 #include "Date.cpp"
 #include "Hash.cpp"
@@ -52,8 +55,8 @@ void display_minimizers(std::vector<Minimizer> minimizer_list) {
 void start() {
 
     // Sample string values
-    string str1 = "CCCTCGGCAATTACTACTCACTTGGAGGGGGCAAGAGCCTGTAGATGCGT";
-    string str2 = "CCCTCGGCAATTACTACTCACTTGGAGGGGGCAAGAGCCTGTAGATGCGT";
+    string str1 = "CCCTCGGCCATTACTAC"; //TCACTTGGAGGGGGCAAGAGCCTGTAGATGCGT";
+    string str2 = "CCCTCGGCAATTACTAC"; //TCACTTGGAGGGGGCAAGAGCCTGTAGATGCGT";
 
     // Counting character frequency of the string
     unordered_map<char, int> str1_freq = CountFrequency::count_frequency(str1);
@@ -86,10 +89,10 @@ void start() {
     }
 
     // Get list of minimizers of string 2.
-    cout << "List of Minimizers of string 1." << endl;
-    vector<Minimiser> minimizers2 = Minimiser::get_minimisers(str2_freq, str2, kmer_size, window_size);
+    cout << "List of Minimizers of string 2." << endl;
+    vector<Minimiser> minimizers2 = Minimiser::get_minimisers(str1_freq, str2, kmer_size, window_size);
     for (auto& k: minimizers2) {
-        auto val1 = str1.substr(k.offset, kmer_size);
+        auto val1 = str2.substr(k.offset, kmer_size);
         auto val2 = k.kmer;
         cout << str2.substr(k.offset, kmer_size) << " : " << k.kmer << endl;
     }
@@ -112,9 +115,28 @@ void start() {
         Minimiser str1_top_kmer = str1_heap.pop();
         Minimiser match_substr = str2_heap.search(str1_top_kmer.kmer);
         cout << "Minimizers of string 1 and 2 matched: " << match_substr.kmer << " " << str1.substr(match_substr.offset, kmer_size) << endl;
+
+        SuffixTree suffix_tree = SuffixTree(str1.substr(match_substr.offset, str1.length()));
+        suffix_tree.visualize();
+        vector<Node> str_suffix_tree = suffix_tree.get_nodes();
+
+        cout << endl;
+        if (match_substr.offset > 0) {
+             
+            ReverseSuffixTree(str1.substr(0, match_substr.offset)).visualize();
+        }
+
+        
     }
+
     cout << "Heap size of string 1: " << str1_heap.size << endl;
     cout << "Heap size of string 2: " << str2_heap.size << endl;
+
+    // Implementing Sparse Suffix Tree and Reverse Sparse Suffix Tree
+    // how to compare the 2 strings 
+    // get the offset of 1 string and extract the substring from dataset
+    // create the suffix tree of the other string
+
 }
 
 int main() {
