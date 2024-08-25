@@ -52,11 +52,73 @@ void display_minimizers(std::vector<Minimizer> minimizer_list) {
     }
 }
 
+int tree_traverse(string str2, Minimiser match_substr, vector<Node> str_suffix_tree) {
+
+    size_t str_offset = 0;
+    size_t i = 0;
+    size_t lcs_length = 0;
+    size_t node_counter = 0;
+    bool iterate = true;
+    string str2_substr = str2.substr(match_substr.offset, str2.length());
+    while (iterate) {
+
+        int node = 0;
+        if (str_suffix_tree[i].ch.size() != 0) {
+
+            node = str_suffix_tree[i].ch[node_counter];
+            i = node;
+        }
+        // leaf node
+        if (str_suffix_tree[i].ch.size() == 0) {
+
+            int ch=0;
+            for (;ch < str_suffix_tree[i].sub.length(); ch++) {
+                char ch_dis = str_suffix_tree[i].sub[ch];
+                char val = str2_substr[str_offset];
+                if (str_suffix_tree[i].sub[ch] == str2_substr[str_offset]) {
+
+                    lcs_length++;
+                    str_offset++;
+                }
+                else {
+                    iterate = false;
+                    break; // break from loop
+                }
+            }
+
+            if (ch == str_suffix_tree[i].sub.length()) {
+                iterate = false;
+            }
+        }
+        else {
+            int node_sub_length = str_suffix_tree[node].sub.length();
+            for (int ch=0; ch < str_suffix_tree[node].sub.length(); ch++) {
+                char str2_substr_char = str2_substr[str_offset];
+                char tree_suffix = str_suffix_tree[node].sub[ch];
+                if (str2_substr[str_offset] == str_suffix_tree[node].sub[ch]) {
+
+                    lcs_length++;
+                    str_offset++;
+
+                    if ((ch+1) == str_suffix_tree[node].sub.length()) {
+
+                        node_counter = 0;
+                        i = node;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return lcs_length;
+}
+
 void start() {
 
     // Sample string values
-    string str1 = "CCCTCGGCCATTACTAC"; //TCACTTGGAGGGGGCAAGAGCCTGTAGATGCGT";
-    string str2 = "CCCTCGGCAATTACTAC"; //TCACTTGGAGGGGGCAAGAGCCTGTAGATGCGT";
+    string str1 = "CCCTCGGCCATTACTACTCACTTGGAGGGGGCAAGAGCCTGTAGATGCGT";
+    string str2 = "CCCTCGGCAATTACTACTCACTTGGAGGGGGCAAGAGCCTGTAGATGCGT";
 
     // Counting character frequency of the string
     unordered_map<char, int> str1_freq = CountFrequency::count_frequency(str1);
@@ -116,17 +178,17 @@ void start() {
         Minimiser match_substr = str2_heap.search(str1_top_kmer.kmer);
         cout << "Minimizers of string 1 and 2 matched: " << match_substr.kmer << " " << str1.substr(match_substr.offset, kmer_size) << endl;
 
-        SuffixTree suffix_tree = SuffixTree(str1.substr(match_substr.offset, str1.length()));
+        SuffixTree suffix_tree = SuffixTree(str1.substr(str1_top_kmer.offset, str1.length()));
         suffix_tree.visualize();
         vector<Node> str_suffix_tree = suffix_tree.get_nodes();
 
+        cout << "LCS: " << tree_traverse(str2, match_substr, str_suffix_tree) << endl;
+        
         cout << endl;
         if (match_substr.offset > 0) {
              
-            ReverseSuffixTree(str1.substr(0, match_substr.offset)).visualize();
+            ReverseSuffixTree(str1.substr(0, str1_top_kmer.offset)).visualize();
         }
-
-        
     }
 
     cout << "Heap size of string 1: " << str1_heap.size << endl;
