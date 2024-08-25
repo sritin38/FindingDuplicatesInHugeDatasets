@@ -114,6 +114,68 @@ int tree_traverse(string str2, Minimiser match_substr, vector<Node> str_suffix_t
     return lcs_length;
 }
 
+int reverse_tree_traverse(string str2, Minimiser match_substr, vector<Node> str_suffix_tree) {
+
+    size_t str_offset = match_substr.offset-1;
+    size_t i = 0;
+    size_t lcs_length = 0;
+    size_t node_counter = 0;
+    bool iterate = true;
+    string str2_substr = str2.substr(0, match_substr.offset);
+    while (iterate) {
+
+        int node = 0;
+        if (str_suffix_tree[i].ch.size() != 0) {
+
+            node = str_suffix_tree[i].ch[node_counter];
+            i = node;
+        }
+        // leaf node
+        if (str_suffix_tree[i].ch.size() == 0) {
+
+            int ch=0;
+            for (;ch < str_suffix_tree[i].sub.length(); ch++) {
+                char ch_dis = str_suffix_tree[i].sub[ch];
+                char val = str2_substr[str_offset];
+                if (str_suffix_tree[i].sub[ch] == str2_substr[str_offset]) {
+
+                    lcs_length++;
+                    str_offset--;
+                }
+                else {
+                    iterate = false;
+                    break; // break from loop
+                }
+            }
+
+            if (ch == str_suffix_tree[i].sub.length()) {
+                iterate = false;
+            }
+        }
+        else {
+            int node_sub_length = str_suffix_tree[node].sub.length();
+            for (int ch=0; ch < str_suffix_tree[node].sub.length(); ch++) {
+                char str2_substr_char = str2_substr[str_offset];
+                char tree_suffix = str_suffix_tree[node].sub[ch];
+                if (str2_substr[str_offset] == str_suffix_tree[node].sub[ch]) {
+
+                    lcs_length++;
+                    str_offset--;
+
+                    if ((ch+1) == str_suffix_tree[node].sub.length()) {
+
+                        node_counter = 0;
+                        i = node;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return lcs_length;
+}
+
 void start() {
 
     // Sample string values
@@ -182,13 +244,23 @@ void start() {
         suffix_tree.visualize();
         vector<Node> str_suffix_tree = suffix_tree.get_nodes();
 
-        cout << "LCS: " << tree_traverse(str2, match_substr, str_suffix_tree) << endl;
+        int lcs_suffix = tree_traverse(str2, match_substr, str_suffix_tree);
+        cout << "LCS: " << lcs_suffix << endl;
         
         cout << endl;
+        int lcs_rev_suffix = 0;
         if (match_substr.offset > 0) {
              
-            ReverseSuffixTree(str1.substr(0, str1_top_kmer.offset)).visualize();
+            ReverseSuffixTree rev_suffix_tree = ReverseSuffixTree(str1.substr(0, str1_top_kmer.offset));
+            rev_suffix_tree.visualize();
+            vector<Node> str_rev_suffix_tree = rev_suffix_tree.get_nodes();
+            lcs_rev_suffix = reverse_tree_traverse(str2, match_substr, str_rev_suffix_tree);
+            cout << "LCS Reverse: " << lcs_rev_suffix << endl;
         }
+
+        int str_start = match_substr.offset - lcs_rev_suffix;
+        int str_len = lcs_rev_suffix + lcs_suffix;
+        cout << "TOTAL TREE LCS: " << str1.substr(str_start, str_len) << endl << "Length: " << str_len << endl;
     }
 
     cout << "Heap size of string 1: " << str1_heap.size << endl;

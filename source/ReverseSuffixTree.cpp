@@ -15,7 +15,12 @@ struct ReverseSuffixTree {
         }
     }
 
-void visualize() {
+    std::vector<Node> get_nodes() {
+
+        return nodes;
+    }
+
+    void visualize() {
         if (nodes.size() == 0) {
             std::cout << "<empty>\n";
             return;
