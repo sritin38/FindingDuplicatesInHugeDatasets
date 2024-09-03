@@ -183,8 +183,8 @@ void start() {
     string str2 = "CCCTCGGCAATTACTACTCACTTGGAGGGGGCAAGAGCCTGTAGATGCGT";
 
     // Counting character frequency of the string
-    unordered_map<char, int> str1_freq = CountFrequency::count_frequency(str1);
-    unordered_map<char, int> str2_freq = CountFrequency::count_frequency(str2);
+    unordered_map<char, long> str1_freq = CountFrequency::count_frequency(str1);
+    unordered_map<char, long> str2_freq = CountFrequency::count_frequency(str2);
 
     // Display character frequency
     // cout << "String 1 frequency pairs: " << endl;

@@ -10,7 +10,7 @@ struct Minimiser {
     size_t offset;
     int kmer = -1;
 
-    static vector<Minimiser> get_minimisers(unordered_map<char, int> str_map, string str, int kmer_size, int window_size) {
+    static vector<Minimiser> get_minimisers(unordered_map<char, long> str_map, string str, int kmer_size, int window_size) {
 
         vector<Minimiser> kmers = vector<Minimiser>();
 

@@ -55,7 +55,7 @@ int main() {
     int window = 5;
     std::cout << "Testing Lexicographical\n";
     std::string sequence = "ABAAABBAACBAAAAABBAABABAA";
-    std::vector minimizers = windowStringSequence(sequence, kmer, window);
+    std::vector<Minimizer> minimizers = windowStringSequence(sequence, kmer, window);
     
     for (int i=0; i<minimizers.size(); i++) {
 

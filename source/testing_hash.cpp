@@ -1,8 +1,35 @@
 #include <iostream>
 #include <string>
+#include <fstream>
+
 #include "../include/rabinkarphash.h" // Include your header file
 
 int main() {
+
+    // Read from the text file
+    ifstream input_file("../data/dna50MB.txt");
+
+    // Check if the file is successfully opened 
+    if (!input_file.is_open()) { 
+        cerr << "Error opening the file!" << endl; 
+        return 1; 
+    } 
+  
+    string line; // Declare a string variable to store each 
+                 // line of the file 
+  
+    // Read each line of the file and print it to the 
+    // standard output stream 
+    cout << "File Content: " << endl; 
+    while (getline(input_file, line)) { 
+        cout << line << endl; // Print the current line 
+    } 
+  
+    // Close the file 
+    input_file.close();
+
+    return 0;
+
     std::string inputString = "ABCABCD";
     int substringLength = 3; // Length of substrings (sliding window size)
     int hashBits = 32; // Desired number of bits in the hash value
