@@ -8,25 +8,27 @@ using namespace std;
 struct Minimiser {
 
     size_t offset;
-    int kmer = -1;
+    long kmer = -1;
 
     static vector<Minimiser> get_minimisers(unordered_map<char, long> str_map, string str, int kmer_size, int window_size) {
 
         vector<Minimiser> kmers = vector<Minimiser>();
 
-        int potential_kmer = 0;
-        for (int i=0; i<=str.length()-window_size; i++) {
+        long potential_kmer = 0;
+        for (long i=0; i<=str.length()-window_size; i++) {
 
-            int condition = i + window_size - kmer_size;
-            int new_kmer = 0;
-            int position = 0;
-            for (int j=i; j<=condition; j++) {
+            long condition = i + window_size - kmer_size;
+            long new_kmer = 0;
+            long position = 0;
+            for (long j=i; j<=condition; j++) {
 
-                int num = 0;
-                num = num + (str_map[str.at(j)] * 100);
-                num = num + (str_map[str.at(j+1)] * 10);
-                num = num + str_map[str.at(j+2)];
+                string str_num;
+                for (long k=0; k < kmer_size; k++) {
+
+                    str_num = str_num + to_string(str_map[str.at(j+k)]);
+                }
                 
+                long num = stol(str_num);
                 if (j != i) {
                     if (new_kmer > num && new_kmer != num) {
 

@@ -8,22 +8,22 @@ class MaxHeap {
     public:
         vector<Minimiser> array;
         int size;
-        int capacity;
+        long capacity;
 
         // Constructor
-        MaxHeap(int capacity) {
+        MaxHeap(long capacity) {
             this->size = 0;
             this->capacity = capacity;
             this->array.resize(capacity);
         }
 
         // Heapify function, heapify the node at index 'i'
-        void heapify(int i) {
+        void heapify(long i) {
 
             // initialize initial values
-            int largest = i;
-            int left = 2 * i + 1;
-            int right = 2 * i + 2;
+            long largest = i;
+            long left = 2 * i + 1;
+            long right = 2 * i + 2;
 
             // Compare root node with left node of subtree
             if (left < size && array[left].kmer > array[largest].kmer) {
@@ -47,7 +47,7 @@ class MaxHeap {
             size = capacity;
             array = arr;
 
-            for (int i= (size-1)/2; i>=0; i--) {
+            for (long i= (size-1)/2; i>=0; i--) {
                 heapify(i);
             }
         }
@@ -62,7 +62,7 @@ class MaxHeap {
             }
 
             size++;
-            int i = size-1;
+            long i = size-1;
             array[i] = value;
 
             // Adjust the value in the heap
@@ -112,8 +112,8 @@ class MaxHeap {
         // Delete a specific key from heap
         void deleteKey(size_t key) {
 
-            int index = -1;
-            for (int i=0; i<size; i++) {
+            long index = -1;
+            for (long i=0; i<size; i++) {
                 
                 if (array[i].kmer == key) {
                     index = i;
@@ -139,8 +139,8 @@ class MaxHeap {
             heapify(index);
         }
 
-        Minimiser search(int kmer) {
-            for (int i = 0; i < size; ++i) {
+        Minimiser search(long kmer) {
+            for (long i = 0; i < size; ++i) {
                 if (array[i].kmer == kmer) {
                     return array[i]; // Key found
                 }
@@ -151,7 +151,7 @@ class MaxHeap {
         // Function to print the heap
         void print()  {
             cout << "Max Heap: ";
-            for (int i = 0; i < size; ++i)
+            for (long i = 0; i < size; ++i)
                 cout << array[i].kmer << " ";
             cout << endl;
         }

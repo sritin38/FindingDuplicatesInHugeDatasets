@@ -9,29 +9,18 @@ using namespace std;
 
 struct CountFrequency {
 
-    static unordered_map<char, long> count_frequency(string string_path) {
+    static unordered_map<char, long> count_frequency(string &str) {
 
         // 1. Read the Dataset (Replace with your actual data loading)
         // std::string dataset = "CCCTCGGCAATTACTACTCACTTGGAGGGGGCAAGAGCCTGTAGATGCGTCTCCTAAATGGGCGGCGACAGGTTATATCCACATTGTGCACAACATCGGGCGGCGAGTAGAATTATCGCGCGAGAGCGCTAACTTACTAGCCCCTTTCACGCTCAAGAGTGATGTCTACTCCCTTCAGCGCTGTCACCGAAGGGCTATATGCCCATTAAGACTATGCAACATGTCTACGGCATCGTGTCGCAGCGAAGGCTACAATATGAGGCGCCGGGATTTTGACCGTCTTCCTCTAAACCGCCGTTGGGTGCGCGTAGACATGTATGTTTAAAGCGAGCTGTTTTAGCCAGGGAACAGTGCTTGAGGGGCCGGTTGAGGCAGAAACACAGCCCTTTCTCGCGGGTCTGTTTCGTCCGGACAGCGCGAACTCTGCCGAATCACTGTGCCGCAGCCCGGCAGGTTAAGCTTGTAATTGCAGTGCATATCGTAGTTCACCCTGCGTAGTCTATACGCCAATCCGCAGCACCTTTACGATGGGTCCAAAACCAAGCTGCGATATTGGGGTGCAAGGGTCACGACCAAAGAACTTTACTCTCAGTTTCAGAGCGACAGGCACGATTGCCATCGCTCCGTCCAAATGGACCGCTGTATTAGGAGCTGATTGTGCCTTAGAACTCAATCTCCGGATATTCGAGATAACGCACGGGTTTTCAGCCTGCACGGCTGTGGCTAAGAAAGGTAAGCAGCAGTGAGAGCTATGATAGATCAGGCATGTGCACATCTCGGATTCTAGATATATATGGTTTGTCTACCGCAGCGAGGCAACTTGTCGCGCCTGTATGATCGTATGGCGGCAGCGATCACCGCTCGTAATTAGATTCAGCTCTCAGCTGAGGGGGCATAAGCCGCCCTTTCTACAAGTATAAGGGACACTCTGTCACGGATGACTCTTCCGACTACTATTCCCGTTCGCAGAACCGGACTGCGCTATCCGTGCGGTGCTTTA"; 
 
         // Read from the text file
-        ifstream input_file(string_path);
-        string line;
         std::unordered_map<char, long> frequencyMap;
 
-        // Check if the file is successfully opened 
-        if (input_file.is_open()) {
-            while (getline(input_file, line)) { 
-
-                // 2. Count Character Frequencies            
-                for (char c : line) {
-                    frequencyMap[c]++;
-                }
-            }
+        // 2. Count Character Frequencies            
+        for (char c : str) {
+            frequencyMap[c]++;
         }
-
-        // Close the file 
-        input_file.close();
 
         // 3. Sort Characters by Frequency (Descending Order)
         std::vector<std::pair<char, long>> sortedFrequencies(frequencyMap.begin(), frequencyMap.end());
@@ -54,3 +43,8 @@ struct CountFrequency {
         return charToValueMap;
     }
 };
+
+// int main() {
+//     CountFrequency::count_frequency("../data/dna.txt");
+//     return 0;
+// }
