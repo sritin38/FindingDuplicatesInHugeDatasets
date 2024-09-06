@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include "RabinKarpRollingHash.cpp"
 
 using namespace std;
 
@@ -10,7 +11,7 @@ struct Minimiser {
     size_t offset;
     long kmer = -1;
 
-    static vector<Minimiser> get_minimisers(unordered_map<char, long> str_map, string str, int kmer_size, int window_size) {
+    static vector<Minimiser> get_minimisers(unordered_map<char, long> str_map, string &str, int kmer_size, int window_size) {
 
         vector<Minimiser> kmers = vector<Minimiser>();
 
@@ -52,10 +53,56 @@ struct Minimiser {
             }
         }
 
-        // for (int num: kmers) {
-        //     cout << num << endl;
-        // }
-
         return kmers;
     }   
+
+    static vector<Minimiser> get_minimisers(string &str, int kmer_size, int window_size) {
+
+        vector<Minimiser> kmers = vector<Minimiser>();
+        rolling_hash hash;
+
+        long potential_kmer = 0;
+        for (long i=0; i<=str.length()-window_size; i++) {
+
+            long condition = i + window_size - kmer_size;
+            long new_kmer = 0;
+            long position = 0;
+
+            for (long k = 0; k < kmer_size; k++) {
+                    
+                hash.push_back(str[i]);
+            }
+            new_kmer = hash.get();
+
+            for (long j=i; j<=condition; j++) {
+
+                hash.pop_front();
+                hash.push_back(str[i]);
+                long num = hash.get();
+
+                if (j != i) {
+                    if (new_kmer > num && new_kmer != num) {
+
+                        new_kmer = num;
+                        position = j;
+                    }
+                }
+                else {
+                    new_kmer = num;
+                    position = j;
+                }
+            }
+
+            if (potential_kmer != new_kmer) {
+
+                Minimiser minimizer = Minimiser();
+                minimizer.offset = position;
+                potential_kmer = new_kmer;
+                minimizer.kmer = potential_kmer;
+                kmers.push_back(minimizer);
+            }
+        }
+
+        return kmers;
+    }
 };

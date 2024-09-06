@@ -7,6 +7,7 @@ typedef long long ll;
 const ll MOD = 1e9 + 7;
 
 class rolling_hash {
+
    private:
     const ll HASH = 'z' - ('a' - 1) + 1;
 
@@ -46,31 +47,7 @@ class rolling_hash {
     }
 };
 
-// ll solve(string &a, string &b) {
-//     if (a.size() <= b.size()) {
-//         return a == b;
-//     }
-
-//     unordered_map<ll, ll> mp;
-//     rolling_hash hash, hash1;
-
-//     for (ll i = 0; i < b.size(); i++) {
-//         hash.push_back(a[i]);
-//         hash1.push_back(b[i]);
-//     }
-
-//     mp[hash.get()]++;
-
-//     for (ll i = 1; i <= a.size() - b.size(); i++) {
-//         hash.pop_front();
-//         hash.push_back(a[i + b.size() - 1]);
-//         mp[hash.get()]++;
-//     }
-
-//     return mp[hash1.get()];
-// }
-
-int main() {
+int main_test() {
     ios::sync_with_stdio(0);
     cout.tie(0);
     cin.tie(0);
@@ -93,3 +70,5 @@ int main() {
         cout << a[i-2] << a[i-1] << a[i] << " : " << hash_a.get() << endl;
     }
 }
+
+//https://gist.github.com/NamPE286/a436341492dc68364efb37cf873c469a
