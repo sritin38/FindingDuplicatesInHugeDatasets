@@ -69,6 +69,8 @@ int main_test() {
         hash_a.push_back(a[i]);
         cout << a[i-2] << a[i-1] << a[i] << " : " << hash_a.get() << endl;
     }
+
+    return 0;
 }
 
 //https://gist.github.com/NamPE286/a436341492dc68364efb37cf873c469a

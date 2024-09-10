@@ -4,3 +4,16 @@ source/RabinKarpRollingHash.dSYM/Contents/Resources/Relocations/aarch64/RabinKar
 source/HashExecution.dSYM/Contents/Info.plist
 source/HashExecution.dSYM/Contents/Resources/DWARF/HashExecution
 source/HashExecution.dSYM/Contents/Resources/Relocations/aarch64/HashExecution.yml
+source/FrequencyExecution.dSYM/Contents/Info.plist
+source/FrequencyExecution.dSYM/Contents/Resources/DWARF/FrequencyExecution
+source/FrequencyExecution.dSYM/Contents/Resources/Relocations/aarch64/FrequencyExecution.yml
+source/LexicographialExecution.dSYM/Contents/Info.plist
+source/LexicographialExecution.dSYM/Contents/Resources/DWARF/LexicographialExecution
+source/LexicographialExecution.dSYM/Contents/Resources/Relocations/aarch64/LexicographialExecution.yml
+.DS_Store
+source/TreeExecution.dSYM/Contents/Info.plist
+source/TreeExecution.dSYM/Contents/Resources/DWARF/TreeExecution
+source/TreeExecution.dSYM/Contents/Resources/Relocations/aarch64/TreeExecution.yml
+source/DataCreation.dSYM/Contents/Info.plist
+source/DataCreation.dSYM/Contents/Resources/DWARF/DataCreation
+source/DataCreation.dSYM/Contents/Resources/Relocations/aarch64/DataCreation.yml

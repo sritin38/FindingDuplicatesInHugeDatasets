@@ -19,8 +19,8 @@ using namespace std::chrono;
 void start() {
 
     // dataset 1 file path
-    string string_path_1 = "../data/large_datasets/dna1.txt";
-    string string_path_2 = "../data/large_datasets/dna2.txt";
+    string string_path_1 = "../data/dna1.txt";
+    string string_path_2 = "../data/dna2.txt";
     string str1;
     string str2;
     
@@ -52,8 +52,8 @@ void start() {
     // Close the file 
     input_file2.close();
 
-    // str1 = "CCCTCGGCCATTACTACTCACTT"; //GGAGGGGGCAAGAGCCTGTAGATGCGT";
-    // str2 = "CCCTCGGCAATTACTACTCACTT"; //GGAGGGGGCAAGAGCCTGTAGATGCGT";
+    str1 = "CCCTCGGCCATTACTACTCACTT"; //GGAGGGGGCAAGAGCCTGTAGATGCGT";
+    str2 = "CCCTCGGCAATTACTACTCACTT"; //GGAGGGGGCAAGAGCCTGTAGATGCGT";
 
     // Counting character frequency of the string
     unordered_map<char, long> str1_freq = CountFrequency::count_frequency(str1);
@@ -71,9 +71,9 @@ void start() {
     }
 
     // Window size, that will slide accross the string
-    int window_size = 50;
+    int window_size = 5; //50;
     // Kmer size, that could be a potential minimizer
-    int kmer_size = 15;
+    int kmer_size = 3; //15;
 
     // Get list of minimizers of string 1.
     cout << "List of Minimizers of string 1." << endl;
@@ -109,79 +109,10 @@ void start() {
     str2_heap.print();
 
     // Search minimizers of string 1 in heap of string 2.
-    // while (str1_heap.size != -1) {
-
-    //     Minimiser str1_top_kmer = str1_heap.pop();
-    //     Minimiser match_substr = str2_heap.search(str1_top_kmer.kmer);
-    //     if (match_substr.offset == -1 || match_substr.kmer == -1) {
-
-    //         continue;
-    //     }
-    //     cout << "Minimizers of string 1 and 2 matched: " << match_substr.kmer << " " << str1.substr(match_substr.offset, kmer_size) << endl;
-
-    //     // Forward search
-    //     long lcs_suffix = 0;
-    //     long str_offset = match_substr.offset + kmer_size;
-    //     for (long i=str1_top_kmer.offset+kmer_size; 
-    //         (str1[i] == str2[str_offset] && str1.length() > i && str2.length() > str_offset); 
-    //         i++, str_offset++) {
-    //         char val1 = str1[i];
-    //         char val2 = str2[str_offset];
-    //         lcs_suffix++;
-    //     }
-
-    //     long lcs_rev_suffix = 0;
-    //     str_offset = match_substr.offset - 1;
-    //     for (long i=str1_top_kmer.offset - 1; 
-    //         (str1[i] == str2[str_offset] && i >= 0 && str_offset >= 0); 
-    //         i--, str_offset--) {
-
-    //         lcs_rev_suffix++;
-    //     }
-
-    //     long str_start = match_substr.offset - lcs_rev_suffix;
-    //     long str_len = lcs_rev_suffix + kmer_size + lcs_suffix;
-    //     cout << "String matching: " << str1.substr(str_start, str_len) << endl << "Length: " << str_len << endl;
-    // }
+    
 
     // cout << "Heap size of string 1: " << str1_heap.size << endl;
     // cout << "Heap size of string 2: " << str2_heap.size << endl;
-
-    // Search minimizers of string 1 in heap of string 2.
-    while (str1_heap.size != -1) {
-
-        Minimiser str1_top_kmer = str1_heap.pop();
-        Minimiser match_substr = str2_heap.search(str1_top_kmer.kmer);
-        if (match_substr.offset == -1 || match_substr.kmer == -1) {
-
-            continue;
-        }
-        cout << "Minimizers of string 1 and 2 matched: " << match_substr.kmer << " " << str1.substr(match_substr.offset, kmer_size) << " | string1: " << str1_top_kmer.offset << " | string2: " << match_substr.offset << endl;
-
-        // Forward search
-        long lcs_suffix = 0;
-        long str_offset = match_substr.offset + kmer_size;
-        for (long i=str1_top_kmer.offset+kmer_size; 
-            (str1[i] == str2[str_offset] && str1.length() > i && str2.length() > str_offset); 
-            i++, str_offset++) {
-            char val1 = str1[i];
-            char val2 = str2[str_offset];
-            lcs_suffix++;
-        }
-
-        long lcs_rev_suffix = 0;
-        str_offset = match_substr.offset - 1;
-        for (long i=str1_top_kmer.offset - 1; 
-            (str1[i] == str2[str_offset] && i >= 0 && str_offset >= 0); 
-            i--, str_offset--) {
-
-            lcs_rev_suffix++;
-        }
-
-        long str_start = match_substr.offset - lcs_rev_suffix;
-        long str_len = lcs_rev_suffix + kmer_size + lcs_suffix;
-        cout << "String matching: " << str1.substr(str_start, str_len) << endl << "Length: " << str_len << endl;
-    }
 }
 
 int main() {

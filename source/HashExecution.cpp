@@ -3,6 +3,7 @@
 #include <vector>
 #include <unordered_map>
 #include <fstream>
+#include <chrono>
 
 // #include "CountFrequency.cpp"
 #include "NumberFormation.cpp"
@@ -15,12 +16,15 @@
 // #include "Hash.cpp"
 
 using namespace std;
+using namespace std::chrono;
 
 void start() {
 
     // dataset 1 file path
-    string string_path_1 = "../data/dna1.txt";
-    string string_path_2 = "../data/dna2.txt";
+    // string string_path_1 = "../data/dna1.txt";
+    // string string_path_2 = "../data/dna2.txt";
+    string string_path_1 = "../data/large_datasets/dna1.txt";
+    string string_path_2 = "../data/large_datasets/dna2.txt";
     string str1;
     string str2;
     
@@ -28,7 +32,7 @@ void start() {
     ifstream input_file1(string_path_1);
     string line;
 
-    // Check if the file is successfully opened 
+    // Check if the file is successfully opened
     if (input_file1.is_open()) {
         while (getline(input_file1, line)) { 
 
@@ -52,13 +56,13 @@ void start() {
     // Close the file 
     input_file2.close();
 
-    str1 = "CCCTCGGCCATTACTACTCACTT"; //GGAGGGGGCAAGAGCCTGTAGATGCGT";
-    str2 = "CCCTCGGCAATTACTACTCACTT"; //GGAGGGGGCAAGAGCCTGTAGATGCGT";
+    // str1 = "CCCTCGGCCATTACTACTCACTTGGAGGGGGCAAGAGCCTGTAGATGCGT";
+    // str2 = "CCCTCGGCAATTACTACTCACTTGGAGGGGGCAAGAGCCTGTAGATGCGT";
 
     // Window size, that will slide accross the string
-    int window_size = 7;
+    int window_size = 50;
     // Kmer size, that could be a potential minimizer
-    int kmer_size = 3;
+    int kmer_size = 15;
 
     // Get list of minimizers of string 1.
     cout << "List of Minimizers of string 1." << endl;
@@ -100,7 +104,7 @@ void start() {
 
             continue;
         }
-        cout << "Minimizers of string 1 and 2 matched: " << match_substr.kmer << " " << str1.substr(match_substr.offset, kmer_size) << endl;
+        cout << "Minimizers of string 1 and 2 matched: " << match_substr.kmer << " " << str1.substr(match_substr.offset, kmer_size) << " | string1: " << str1_top_kmer.offset << " | string2: " << match_substr.offset << endl;
 
         // Forward search
         long lcs_suffix = 0;
@@ -130,6 +134,10 @@ void start() {
 
 int main() {
 
+    auto start_timer = high_resolution_clock::now();
     start();
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start_timer);
+    cout << duration.count() << endl;
     return 0;
 }
