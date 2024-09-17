@@ -21,10 +21,10 @@ using namespace std::chrono;
 void start() {
 
     // dataset 1 file path
-    // string string_path_1 = "../data/dna1.txt";
-    // string string_path_2 = "../data/dna2.txt";
-    string string_path_1 = "../data/large_datasets/dna1.txt";
-    string string_path_2 = "../data/large_datasets/dna2.txt";
+    string string_path_1 = "../data/proteins1.txt";
+    string string_path_2 = "../data/proteins2.txt";
+    // string string_path_1 = "../data/huge_datasets/dna1.txt";
+    // string string_path_2 = "../data/huge_datasets/dna2.txt";
     string str1;
     string str2;
     
@@ -56,55 +56,71 @@ void start() {
     // Close the file 
     input_file2.close();
 
-    // str1 = "CCCTCGGCCATTACTACTCACTTGGAGGGGGCAAGAGCCTGTAGATGCGT";
+    // str1 = "CCCTCGGCCATTACTACTCACTTGATAGTGCGATGAGCCTGTAGATGCGT";
     // str2 = "CCCTCGGCAATTACTACTCACTTGGAGGGGGCAAGAGCCTGTAGATGCGT";
+    // str2 = "GTGCTCTAGCGATAGTGCGATAAGTGATTAGTACTACGGGGGGGCATGAT";
 
     // Window size, that will slide accross the string
-    int window_size = 50;
+    int window_size = 1000;
     // Kmer size, that could be a potential minimizer
-    int kmer_size = 15;
+    int kmer_size = 50;
 
     // Get list of minimizers of string 1.
-    cout << "List of Minimizers of string 1." << endl;
-    vector<Minimiser> minimizers1 = Minimiser::get_minimisers(str1, kmer_size, window_size);
-    for (auto& k: minimizers1) {
+    cout << "Minimizers for string 1 is generating..." << endl;
 
-        auto val1 = str1.substr(k.offset, kmer_size);
-        auto val2 = k.kmer;
-        cout << str1.substr(k.offset, kmer_size) << " : " << k.kmer << endl;
-    }
+    // Get minimizers 
+    // vector<Minimiser> minimizers1 = Minimiser::get_minimisers(str1, kmer_size, window_size);
+
+    // Get minimizers with jumping window
+    vector<Minimiser> minimizers1 = Minimiser::get_minimisers_spaced_hash(str1, kmer_size, window_size);
+    
+    cout << "Minimizer list for string 1 is generated." << endl;
+    
+    // Display minimizer list of string 1.
+    // for (auto& k: minimizers1) {
+
+    //     auto val1 = str1.substr(k.offset, kmer_size);
+    //     auto val2 = k.kmer;
+    //     cout << str1.substr(k.offset, kmer_size) << " : " << k.kmer << endl;
+    // }
 
     // Get list of minimizers of string 2.
-    cout << "List of Minimizers of string 2." << endl;
-    vector<Minimiser> minimizers2 = Minimiser::get_minimisers(str2, kmer_size, window_size);
-    for (auto& k: minimizers2) {
-        auto val1 = str2.substr(k.offset, kmer_size);
-        auto val2 = k.kmer;
-        cout << str2.substr(k.offset, kmer_size) << " : " << k.kmer << endl;
-    }
+    cout << "Minimizers for string 2 is generating..." << endl;
 
-    // Create heap for string 1.
-    cout << "Heap for string 1." << endl;
-    MaxHeap str1_heap = MaxHeap(minimizers1.size());
-    str1_heap.buildHeap(minimizers1);
-    str1_heap.print();
+    // Get minimizers 
+    // vector<Minimiser> minimizers2 = Minimiser::get_minimisers(str2, kmer_size, window_size);
+
+    // Get minimizers with jumping window
+    vector<Minimiser> minimizers2 = Minimiser::get_minimisers_spaced_hash(str2, kmer_size, window_size);
+
+    cout << "Minimizer list for string 2 is generated." << endl;
+    
+    // Display minimizers list of string 2.
+    // for (auto& k: minimizers2) {
+    //     auto val1 = str2.substr(k.offset, kmer_size);
+    //     auto val2 = k.kmer;
+    //     cout << str2.substr(k.offset, kmer_size) << " : " << k.kmer << endl;
+    // }
 
     // Create heap for string 2
-    cout << "Heap for string 2." << endl;
+    cout << "Heap created for string 2." << endl;
     MaxHeap str2_heap = MaxHeap(minimizers2.size());
     str2_heap.buildHeap(minimizers2);
-    str2_heap.print();
+    // str2_heap.print();
 
     // Search minimizers of string 1 in heap of string 2.
-    while (str1_heap.size != -1) {
+    size_t lcs_offset = 0;
+    size_t lcs_length = 0;
+    while (minimizers1.size() > 0) {
 
-        Minimiser str1_top_kmer = str1_heap.pop();
+        Minimiser str1_top_kmer = minimizers1[0];
+        minimizers1.erase(minimizers1.begin());
         Minimiser match_substr = str2_heap.search(str1_top_kmer.kmer);
         if (match_substr.offset == -1 || match_substr.kmer == -1) {
 
             continue;
         }
-        cout << "Minimizers of string 1 and 2 matched: " << match_substr.kmer << " " << str1.substr(match_substr.offset, kmer_size) << " | string1: " << str1_top_kmer.offset << " | string2: " << match_substr.offset << endl;
+        // cout << "Minimizers of string 1 and 2 matched: " << match_substr.kmer << " " << str1.substr(match_substr.offset, kmer_size) << " | string1: " << str1_top_kmer.offset << " | string2: " << match_substr.offset << endl;
 
         // Forward search
         long lcs_suffix = 0;
@@ -128,16 +144,27 @@ void start() {
 
         long str_start = match_substr.offset - lcs_rev_suffix;
         long str_len = lcs_rev_suffix + kmer_size + lcs_suffix;
-        cout << "String matching: " << str1.substr(str_start, str_len) << endl << "Length: " << str_len << endl;
+        if (str_len > lcs_length) {
+            lcs_offset = str_start;
+            lcs_length = str_len;
+        }
     }
+
+    cout << "String matching: " << str1.substr(lcs_offset, lcs_length) << endl << "Length: " << lcs_length << endl;
 }
 
 int main() {
+
+    struct rusage usage;
+    getrusage(RUSAGE_SELF, &usage);
+    // long peakMemoryKB = usage.ru_maxrss;
 
     auto start_timer = high_resolution_clock::now();
     start();
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start_timer);
-    cout << duration.count() << endl;
+    
+    long peakMemoryKB = usage.ru_maxrss;
+    cout << "Time duration: " << duration.count() << " | Memory usage: " << peakMemoryKB << endl;
     return 0;
 }

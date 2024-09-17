@@ -121,7 +121,7 @@ class MaxHeap {
                 }
             }
 
-            if (index == size-1) {
+            if (index == size) {
 
                 cout << "Key not found" << endl;
                 return;
